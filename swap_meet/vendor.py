@@ -47,3 +47,36 @@ class Vendor:
         their_item = other_vendor.inventory[0]
 
         return self.swap_items(other_vendor, my_item, their_item)
+
+    ######Wave 6######
+    #1. Method takes 1 argument (category) string
+    #2. Returns a list of items from the vendor's inventory that match the given category.
+    #3. If no items match the category, return an empty list.
+    def get_by_category(self, category):
+        match_category = []
+        for item in self.inventory:
+                if item.get_category() == category:
+                    match_category.append(item)
+        return match_category
+        
+
+    #1. Will get item with best condition in the given category
+    def get_best_by_category(self, category):
+        
+        best_item = None
+        matching_items = self.get_by_category(category)
+
+        for item in matching_items:
+            if best_item is None or item.condition > best_item.condition:
+                best_item = item
+
+        return best_item
+       
+    def swap_best_by_category(self, other_vendor, my_priority, their_priority):
+        my_best_item = self.get_best_by_category(their_priority)
+        their_best_item = other_vendor.get_best_by_category(my_priority)
+
+        if not my_best_item or not their_best_item:
+            return False
+
+        return self.swap_items(other_vendor, my_best_item, their_best_item)
